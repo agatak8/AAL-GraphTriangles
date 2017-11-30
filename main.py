@@ -3,13 +3,10 @@
 import argparse
 
 
-def print_usage():
-    print("Stub usage list")
-
-
 def main():
     main_parser = argparse.ArgumentParser(description="Graph triangle finder")
-    subparsers = main_parser.add_subparsers(dest="mode", help="sub-command help")
+    subparsers = main_parser.add_subparsers(dest="mode", help="program mode")
+    subparsers.required = True
 
     # mode 1
     m1_parser = subparsers.add_parser("stdio", help="take graph data from stdin and put solution in stdout")
