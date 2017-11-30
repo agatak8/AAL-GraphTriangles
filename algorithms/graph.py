@@ -1,3 +1,10 @@
+def get_vertices_in_edges(edges):
+    vertices = set()
+    for edge in edges:
+        vertices.update(edge)
+    return vertices
+
+
 class Graph(object):
     def __init__(self, vertices=set(), edges=set()):
         self.vertices = vertices
@@ -37,20 +44,8 @@ class Graph(object):
     def get_subgraph_with_vertices(self, vertices):
         return Graph(vertices, set(edge for edge in self.edges if edge.issubset(vertices)))
 
-    def get_subgraph_with_vertices_in_edges(self, edges):
-        vertices = set()
-        for edge in edges:
-            vertices.update(edge)
-        return self.get_subgraph_with_vertices(vertices)
-
     def get_subgraph_without_vertices(self, vertices):
         return self.get_subgraph_with_vertices(self.vertices - vertices)
-
-    def get_subgraph_without_vertices_in_edges(self, edges):
-        vertices_to_remove = set()
-        for edge in edges:
-            vertices_to_remove.update(edge)
-        return self.get_subgraph_without_vertices(vertices_to_remove)
 
     def get_complement(self):
         edges = set({v, w} for v in self.vertices for w in self.vertices if {v, w} not in self.edges and v != w)
@@ -59,14 +54,22 @@ class Graph(object):
 
 class AdjacencyList(object):
     def __init__(self, vertices=set(), edges=set()):
-        self.data = dict.fromkeys(vertices, set())
+        self.data = dict()
+        for v in vertices:
+            self.data[v] = set()
         for edge in edges:
             vs = list(edge)
-            self.data[vs[0]].update(vs[1])
-            self.data[vs[1]].update(vs[0])
+            self.add_edge(vs[0], vs[1])
 
     def vertices(self):
         return self.data.keys()
+
+    def edges(self):
+        edge_set = set()
+        for v in self.data:
+            for u in self.data[v]:
+                edge_set.update({v, u})
+        return edge_set
 
     def get_vertex_count(self):
         return len(self.data)
@@ -75,8 +78,8 @@ class AdjacencyList(object):
         return sum(len(self.data[v]) for v in self.data) / 2
 
     def add_edge(self, v1, v2):
-        self.data[v1].update(v2)
-        self.data[v2].update(v1)
+        (self.data[v1]).add(v2)
+        (self.data[v2]).add(v1)
 
     def add_vertex(self, v1):
         self.data[v1] = set()
@@ -102,14 +105,8 @@ class AdjacencyList(object):
     def get_subgraph_with_vertices(self, vertices):
         new_graph = AdjacencyList(vertices)
         for v in vertices:
-            new_graph.data[v] = self.data[v]
+            new_graph.data[v] = self.data[v].intersection(vertices)
         return new_graph
-
-    def get_subgraph_with_vertices_in_edges(self, edges):
-        vertices = set()
-        for edge in edges:
-            vertices.update(edge)
-        return self.get_subgraph_with_vertices(vertices)
 
     def get_subgraph_without_vertices(self, vertices):
         new_data = self.data.copy()
@@ -120,12 +117,6 @@ class AdjacencyList(object):
         new_graph = AdjacencyList()
         new_graph.data = new_data
         return new_graph
-
-    def get_subgraph_without_vertices_in_edges(self, edges):
-        vertices = set()
-        for edge in edges:
-            vertices.update(edge)
-        return self.get_subgraph_without_vertices(vertices)
 
     def get_complement(self):
         vertices = set(self.data.keys())

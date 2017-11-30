@@ -1,4 +1,5 @@
 import algorithms.bruteforce
+from algorithms.graph import get_vertices_in_edges
 
 
 def divide_and_conquer(graph, fallback=algorithms.bruteforce.brute_force):
@@ -24,7 +25,7 @@ def divide_and_conquer(graph, fallback=algorithms.bruteforce.brute_force):
     # of either of the previously created 2 subgraphs
     # and taking the vertices that are part of these edges
     remaining_edges = graph.edges - graph1.edges - graph2.edges
-    graph3 = graph.get_subgraph_with_vertices_in_edges(remaining_edges)
+    graph3 = graph.get_subgraph_with_vertices(get_vertices_in_edges(remaining_edges))
 
     # division failed
     if graph3.get_vertex_count() == n_vertices:
