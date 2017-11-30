@@ -5,53 +5,6 @@ def get_vertices_in_edges(edges):
     return vertices
 
 
-class Graph(object):
-    def __init__(self, vertices=set(), edges=set()):
-        self.vertices = vertices
-        self.edges = edges
-
-    def vertices(self):
-        return self.vertices
-
-    def get_vertex_count(self):
-        return len(self.vertices)
-
-    def get_edge_count(self):
-        return len(self.edges)
-
-    def add_edge(self, v1, v2):
-        self.edges.add({v1, v2})
-
-    def add_vertex(self, v1):
-        self.vertices.add(v1)
-
-    def remove_vertex(self, v1):
-        self.vertices.remove(v1)
-        self.edges.remove(edge for edge in self.edges if v1 in edge)
-
-    def remove_edge(self, v1, v2):
-        self.edges.remove({v1, v2})
-
-    def has_edge(self, v1, v2):
-        return {v1, v2} in self.edges
-
-    def has_vertex(self, v1):
-        return v1 in self.vertices
-
-    def degree(self, v1):
-        return sum(1 for edge in self.edges if v1 in edge)
-
-    def get_subgraph_with_vertices(self, vertices):
-        return Graph(vertices, set(edge for edge in self.edges if edge.issubset(vertices)))
-
-    def get_subgraph_without_vertices(self, vertices):
-        return self.get_subgraph_with_vertices(self.vertices - vertices)
-
-    def get_complement(self):
-        edges = set({v, w} for v in self.vertices for w in self.vertices if {v, w} not in self.edges and v != w)
-        return Graph(self.vertices, edges)
-
-
 class AdjacencyList(object):
     def __init__(self, vertices=set(), edges=set()):
         self.data = dict()
