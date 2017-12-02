@@ -1,8 +1,8 @@
-import algorithms.bruteforce
+import algorithms.solvers
 from algorithms.graph import get_vertices_in_edges
 
 
-def divide_and_conquer(graph, fallback=algorithms.bruteforce.brute_force):
+def divide_and_conquer(graph, fallback=algorithms.solvers.brute_force):
     n_vertices = graph.get_vertex_count()
     n_edges = graph.get_edge_count()
 
