@@ -1,30 +1,62 @@
-import algorithms.graph
-
-
-# file - must be in the following format:
+# this library allows converting graphs and triangles to/from their string formats
+#
+# graph - is a list/tuple with 3 items:
+# item 1 - a list/tuple of vertices
+# item 2 - a dict that maps vertices to points
+# item 3 - a list/tuple of edges
+#
+# vertex is an int
+# point is a tuple of two floats
+# edge is a list/tuple of two vertices
+#
+# triangles - is a list/tuple of triangles where
+# a single triangle is a list/tuple of 3 vertices
+#
+# graph string format:
 # n_vertices            (1)
 # vertex_nr;x;y         (n_vertices)
-# vertex_nr;vertex_nr   (0..n_vertices choose 2)
+# vertex_nr1;vertex_nr2   (0..*)
 #
-# separator - allows to optionally use a different character
-# than ; to separate values in the file
+# triangles string format:
+# vertex_n1r;vertex_nr2;vertex_nr3 (0..*)
 #
-# returns 3 generators:
-# vertices - numbers 0 to n_vertices - 1
-# vertex_points - tuples of form (int, tuple(float, float)) meaning (vertex, (x, y))
-# edges - tuples (int,int) meaning (vertex1, vertex2)
-def parse_file(file, separator=';'):
+# ; is the default separator but any other character/string can be used as well
+
+
+# generate graph out of string
+def input_to_graph(input, separator=';'):
     # first line - number of vertices
-    n_vertices = int(file.readline().strip())
+    n_vertices = int(input.readline().strip())
     vertices = range(n_vertices)
 
     # exactly as many lines as vertices - each line specifies a vertex's coordinates in xy space
     split_coordinate_lines = (line.strip().split(separator) for _, line in
-                              zip(range(n_vertices), file))  # generates lists of 3 strings
+                              zip(range(n_vertices), input))  # generates lists of 3 strings
     vertex_points = ((int(list[0]), (float(list[1]), float(list[2]))) for list in
                      split_coordinate_lines)  # generates tuple with vertex and its coordinates
 
     # varied amount of lines - each line specifies a unique edge
-    split_edge_lines = (line.strip().split(separator) for line in file)  # generates lists of 2 strings
+    split_edge_lines = (line.strip().split(separator) for line in input)  # generates lists of 2 strings
     edges = ((int(list[0]), int(list[1])) for list in split_edge_lines)  # generates vertex pairs
     return vertices, vertex_points, edges
+
+
+# generate string out of a graph
+def graph_to_output(vertices, vertex_points, edges, separator=';'):
+    v_gen = (separator.join((str(v), str(vertex_points[v][0]), str(vertex_points[v][1]))) for v in vertex_points)
+    v = "\n".join(v_gen)
+    e_gen = (separator.join((str(edge[0]), str(edge[1]))) for edge in edges)
+    e = "\n".join(e_gen)
+    return "\n".join((str(len(vertices)), v, e))
+
+
+# generate triangle list out of string
+def input_to_triangles(input, separator=";"):
+    split_lines = (line.strip().split(separator) for line in input)
+    triangles = ((int(line[0]), int(line[1]), int(line[2])) for line in split_lines)
+    return triangles
+
+
+# generate string out of triangles
+def triangles_to_output(triangles, separator=";"):
+    return "\n".join(separator.join((str(t[0]), str(t[1]), str(t[2]))) for t in triangles)
