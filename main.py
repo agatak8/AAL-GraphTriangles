@@ -2,9 +2,23 @@
 
 import argparse
 
+import sys
+
+import algorithms.solvers as solvers
+
+import helpers.io
+
 
 def stdio(args):
-    pass
+    try:
+        io_graph = helpers.io.input_to_graph(sys.stdin)
+    except ValueError as e:
+        print("Invalid graph data provided")
+        print(e.args)
+        return
+    triangles = solvers.solve(io_graph[0], io_graph[2], args.a)
+    result = helpers.io.triangles_to_output(triangles)
+    sys.stdout.write(result)
 
 
 def gen(args):
@@ -17,7 +31,8 @@ def test(args):
 
 def main():
     main_parser = argparse.ArgumentParser(description="Graph triangle finder")
-    main_parser.add_argument("alg", metavar="algorithm", type=str, choices=alg_list, required=True)
+    main_parser.add_argument("-a", type=str, choices=solvers.algs.keys(),
+                             required=True)
     subparsers = main_parser.add_subparsers(dest="mode", help="program mode")
     subparsers.required = True
 
@@ -40,8 +55,8 @@ def main():
     m3_parser.add_argument("-r", type=int, required=True, help="number of random graphs generated per size")
     m3_parser.set_defaults(func=test)
 
-    namespace = main_parser.parse_args()
-    print(namespace)
+    args = main_parser.parse_args()
+    args.func(args)
 
 
 if __name__ == "__main__":

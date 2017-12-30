@@ -53,37 +53,3 @@ class TestAdjacencyList(unittest.TestCase):
         for v in vertices:
             for u in vertices:
                 self.assertEqual(graph.has_edge(v, u), graph2.has_edge(v, u))
-
-    def test_subgraph_with_one_vertex(self):
-        graph = AdjacencyList(vertices, edges)
-        subgraph = graph.get_subgraph_with_vertices({1})
-        self.assertEqual(subgraph.get_edge_count(), 0)
-        self.assertEqual(subgraph.get_vertex_count(), 1)
-
-    def test_subgraph_with_all_vertices(self):
-        graph = AdjacencyList(vertices, edges)
-        subgraph = graph.get_subgraph_with_vertices(vertices)
-        self.assertEqual(graph.get_vertex_count(), subgraph.get_vertex_count())
-        self.assertEqual(graph.get_edge_count(), subgraph.get_edge_count())
-        for e in edges:
-            self.assertTrue(subgraph.has_edge(e[0], e[1]))
-
-    def test_subgraph_with_some_vertices(self):
-        graph = AdjacencyList(vertices, edges)
-        subset = {1, 2, 4}
-        subgraph = graph.get_subgraph_with_vertices(subset)
-        for v in vertices:
-            self.assertEqual(v in subset, subgraph.has_vertex(v))
-        subedges = [edge for edge in edges if (edge[0] in subset and edge[1] in subset)]
-        self.assertEqual(subgraph.get_edge_count(), len(subedges))
-        for e in subedges:
-            self.assertTrue(subgraph.has_edge(e[0], e[1]))
-
-    def test_subgraph_without_some_vertices(self):
-        graph = AdjacencyList(vertices, edges)
-        subset = {1, 2, 4}
-        subgraph = graph.get_subgraph_without_vertices(subset)
-        for v in vertices:
-            self.assertNotEqual(v in subset, subgraph.has_vertex(v))
-        for e in subgraph.edges():
-            self.assertEqual(subset.intersection(e), set())

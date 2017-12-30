@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def get_vertices_in_edges(edges):
     vertices = set()
     for edge in edges:
@@ -11,8 +14,7 @@ class AdjacencyList(object):
         for v in vertices:
             self.data[v] = set()
         for edge in edges:
-            vs = list(edge)
-            self.add_edge(vs[0], vs[1])
+            self.add_edge(edge[0], edge[1])
 
     def vertices(self):
         return self.data.keys()
@@ -23,6 +25,9 @@ class AdjacencyList(object):
             for u in self.data[v]:
                 edge_set.update({v, u})
         return edge_set
+
+    def neighbors(self, v1):
+        return self.data[v1]
 
     def get_vertex_count(self):
         return len(self.data)
@@ -54,22 +59,6 @@ class AdjacencyList(object):
 
     def degree(self, v1):
         return len(self.data[v1])
-
-    def get_subgraph_with_vertices(self, vertices):
-        new_graph = AdjacencyList(vertices)
-        for v in vertices:
-            new_graph.data[v] = self.data[v].intersection(vertices)
-        return new_graph
-
-    def get_subgraph_without_vertices(self, vertices):
-        new_data = self.data.copy()
-        for v in vertices:
-            del new_data[v]
-            for u in new_data:
-                new_data[u].discard(v)
-        new_graph = AdjacencyList()
-        new_graph.data = new_data
-        return new_graph
 
     def get_complement(self):
         vertices = set(self.data.keys())

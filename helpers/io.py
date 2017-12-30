@@ -32,12 +32,14 @@ def input_to_graph(input, separator=';'):
     # exactly as many lines as vertices - each line specifies a vertex's coordinates in xy space
     split_coordinate_lines = (line.strip().split(separator) for _, line in
                               zip(range(n_vertices), input))  # generates lists of 3 strings
-    vertex_points = ((int(list[0]), (float(list[1]), float(list[2]))) for list in
-                     split_coordinate_lines)  # generates tuple with vertex and its coordinates
+    vertex_points = tuple((int(list[0]), (float(list[1]), float(list[2]))) for list in
+                     split_coordinate_lines)  # tuples with vertex and its coordinates
+    if len(vertex_points) != n_vertices:
+        raise(ValueError("Amount of vertex coordinate lines doesn't match amount of vertices"))
 
     # varied amount of lines - each line specifies a unique edge
     split_edge_lines = (line.strip().split(separator) for line in input)  # generates lists of 2 strings
-    edges = ((int(list[0]), int(list[1])) for list in split_edge_lines)  # generates vertex pairs
+    edges = tuple((int(list[0]), int(list[1])) for list in split_edge_lines)  # vertex pairs
     return vertices, vertex_points, edges
 
 
@@ -53,7 +55,7 @@ def graph_to_output(vertices, vertex_points, edges, separator=';'):
 # generate triangle list out of string
 def input_to_triangles(input, separator=";"):
     split_lines = (line.strip().split(separator) for line in input)
-    triangles = ((int(line[0]), int(line[1]), int(line[2])) for line in split_lines)
+    triangles = tuple((int(line[0]), int(line[1]), int(line[2])) for line in split_lines)
     return triangles
 
 
