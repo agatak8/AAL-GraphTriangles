@@ -43,7 +43,7 @@ class TestAdjacencyList(unittest.TestCase):
         complement = graph.get_complement()
         for v in vertices:
             for u in vertices:
-                if (v != u):
+                if v != u:
                     self.assertTrue(complement.has_edge(v, u))
 
     def test_complement_inverse(self):
@@ -51,5 +51,10 @@ class TestAdjacencyList(unittest.TestCase):
         complement = graph.get_complement()
         graph2 = complement.get_complement()
         for v in vertices:
+            self.assertFalse(graph.has_edge(v, v))
             for u in vertices:
                 self.assertEqual(graph.has_edge(v, u), graph2.has_edge(v, u))
+
+
+if __name__ == '__main__':
+    unittest.main()

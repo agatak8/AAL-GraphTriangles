@@ -8,8 +8,8 @@ def naive(vertices, edges, only_count=False):
         results = []
         count = 0
         for i in range(0, len(v)):
-            for j in range(i, len(v)):
-                for k in range(i, len(v)):
+            for j in range(i + 1, len(v)):
+                for k in range(j + 1, len(v)):
                     if graph.has_edge(v[i], v[j]) and graph.has_edge(v[i], v[k]) and graph.has_edge(v[j], v[k]):
                         if only_count:
                             count += 1
@@ -26,13 +26,20 @@ def naive(vertices, edges, only_count=False):
 
 
 def matrix(vertices, edges, dummy_arg=None):
-    m1 = np.zeros(len(vertices), len(vertices))
+    vertex_dict = {}
+    i = 0
+    for v in vertices:
+        vertex_dict[v] = i
+        i += 1
+    m1 = np.matrix(np.zeros((i, i), dtype=np.int))
     for edge in edges:
         v1 = edge[0]
         v2 = edge[1]
-        m1[v1][v2] = m1[v2][v1] = 1
+        m1[vertex_dict[v1], vertex_dict[v2]] = m1[vertex_dict[v2], vertex_dict[v1]] = 1
     m2 = m1 ^ 1
-    return (m1 ** 3).trace() / 6 + (m2 ** 3).trace() / 6
+    for i in range(len(vertices)):
+        m2[i,i] = 0
+    return ((m1 ** 3).trace() / 6 + (m2 ** 3).trace() / 6)[0,0]
 
 
 def adj_list(vertices, edges, only_count=False):
@@ -43,7 +50,7 @@ def adj_list(vertices, edges, only_count=False):
             for v2 in n:
                 for v3 in n:
                     if graph.has_edge(v2, v3):
-                        results.add({v1, v2, v3})
+                        results.add(frozenset((v1, v2, v3)))
         return results
 
     g1 = graph.AdjacencyList(vertices, edges)
@@ -77,7 +84,7 @@ def degree(vertices, edges, only_count=False):
                         continue
                     common_neighbors = graph.neighbors(vd[0]) & graph.neighbors(v2[0][0])
                     for v3 in common_neighbors:
-                        results.add({vd[0], v2[0][0], v3})
+                        results.add(frozenset((vd[0], v2[0][0], v3)))
                     update_neighbor(v2)
             else:
                 for v in neighbors:

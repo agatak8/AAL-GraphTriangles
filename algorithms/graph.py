@@ -64,5 +64,5 @@ class AdjacencyList(object):
         vertices = set(self.data.keys())
         new_graph = AdjacencyList(vertices)
         for v in self.data:
-            new_graph.data[v] = vertices - self.data[v]
+            new_graph.data[v] = vertices - self.data[v] - {v}
         return new_graph
