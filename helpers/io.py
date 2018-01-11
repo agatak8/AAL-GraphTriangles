@@ -20,11 +20,11 @@
 # triangles string format:
 # vertex_n1r;vertex_nr2;vertex_nr3 (0..*)
 #
-# ; is the default separator but any other character/string can be used as well
-
+# " " is the default separator but any other character/string can be used as well
+io_separator = " "
 
 # generate graph out of string
-def input_to_graph(input, separator=';'):
+def input_to_graph(input, separator=io_separator):
     # first line - number of vertices
     n_vertices = int(input.readline().strip())
     vertices = range(n_vertices)
@@ -44,7 +44,7 @@ def input_to_graph(input, separator=';'):
 
 
 # generate string out of a graph
-def graph_to_output(vertices, vertex_points, edges, separator=';'):
+def graph_to_output(vertices, vertex_points, edges, separator=io_separator):
     v_gen = (separator.join((str(v), str(vertex_points[v][0]), str(vertex_points[v][1]))) for v in vertex_points)
     v = "\n".join(v_gen)
     e_gen = (separator.join((str(edge[0]), str(edge[1]))) for edge in edges)
@@ -53,12 +53,12 @@ def graph_to_output(vertices, vertex_points, edges, separator=';'):
 
 
 # generate triangle list out of string
-def input_to_triangles(input, separator=";"):
+def input_to_triangles(input, separator=io_separator):
     split_lines = (line.strip().split(separator) for line in input)
     triangles = tuple((int(line[0]), int(line[1]), int(line[2])) for line in split_lines)
     return triangles
 
 
 # generate string out of triangles
-def triangles_to_output(triangles, separator=";"):
+def triangles_to_output(triangles, separator=io_separator):
     return "\n".join(separator.join((str(t[0]), str(t[1]), str(t[2]))) for t in triangles)
