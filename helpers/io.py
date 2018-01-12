@@ -23,6 +23,7 @@
 # " " is the default separator but any other character/string can be used as well
 io_separator = " "
 
+
 # generate graph out of string
 def input_to_graph(input, separator=io_separator):
     # first line - number of vertices
@@ -33,9 +34,9 @@ def input_to_graph(input, separator=io_separator):
     split_coordinate_lines = (line.strip().split(separator) for _, line in
                               zip(range(n_vertices), input))  # generates lists of 3 strings
     vertex_points = tuple((int(list[0]), (float(list[1]), float(list[2]))) for list in
-                     split_coordinate_lines)  # tuples with vertex and its coordinates
+                          split_coordinate_lines)  # tuples with vertex and its coordinates
     if len(vertex_points) != n_vertices:
-        raise(ValueError("Amount of vertex coordinate lines doesn't match amount of vertices"))
+        raise (ValueError("Amount of vertex coordinate lines doesn't match amount of vertices"))
 
     # varied amount of lines - each line specifies a unique edge
     split_edge_lines = (line.strip().split(separator) for line in input)  # generates lists of 2 strings
@@ -61,4 +62,5 @@ def input_to_triangles(input, separator=io_separator):
 
 # generate string out of triangles
 def triangles_to_output(triangles, separator=io_separator):
-    return "\n".join(separator.join((str(t[0]), str(t[1]), str(t[2]))) for t in triangles)
+    result = [tuple(t) for t in triangles]
+    return "\n".join(separator.join((str(t[0]), str(t[1]), str(t[2]))) for t in result)

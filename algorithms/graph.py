@@ -1,13 +1,3 @@
-import numpy as np
-
-
-def get_vertices_in_edges(edges):
-    vertices = set()
-    for edge in edges:
-        vertices.update(edge)
-    return vertices
-
-
 class AdjacencyList(object):
     def __init__(self, vertices=set(), edges=set()):
         self.data = dict()
@@ -60,9 +50,10 @@ class AdjacencyList(object):
     def degree(self, v1):
         return len(self.data[v1])
 
+    # ~O(n)
     def get_complement(self):
         vertices = set(self.data.keys())
         new_graph = AdjacencyList(vertices)
         for v in self.data:
-            new_graph.data[v] = vertices - self.data[v] - {v}
+            new_graph.data[v] = vertices - self.data[v] - {v} # O(len(vertices)) + O(len(v.edges))
         return new_graph

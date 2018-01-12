@@ -2,14 +2,16 @@ import algorithms.graph as graph
 import numpy as np
 
 
+# avg O(n^3), worst O(n^4)
 def naive(vertices, edges, only_count=False):
     def sub_solve(graph):
-        v = list(vertices)
+        v = list(vertices)  # O(N)
         results = []
         count = 0
         for i in range(0, len(v)):
             for j in range(i + 1, len(v)):
                 for k in range(j + 1, len(v)):
+                    # avg O(1), worst case O(n)
                     if graph.has_edge(v[i], v[j]) and graph.has_edge(v[i], v[k]) and graph.has_edge(v[j], v[k]):
                         if only_count:
                             count += 1
@@ -25,6 +27,7 @@ def naive(vertices, edges, only_count=False):
     return sub_solve(g1) + sub_solve(g2)
 
 
+# best O(n^2.3727), worst O(n^3)
 def matrix(vertices, edges, dummy_arg=None):
     vertex_dict = {}
     i = 0
@@ -38,19 +41,22 @@ def matrix(vertices, edges, dummy_arg=None):
         m1[vertex_dict[v1], vertex_dict[v2]] = m1[vertex_dict[v2], vertex_dict[v1]] = 1
     m2 = m1 ^ 1
     for i in range(len(vertices)):
-        m2[i,i] = 0
-    return ((m1 ** 3).trace() / 6 + (m2 ** 3).trace() / 6)[0,0]
+        m2[i, i] = 0
+    return ((m1 ** 3).trace() / 6 + (m2 ** 3).trace() / 6)[0, 0]
 
 
+# avg O(n^3), worst O(n^4)
 def adj_list(vertices, edges, only_count=False):
     def sub_solve(graph):
-        results = set()
-        for v1 in graph.vertices():
-            n = graph.neighbors(v1)
-            for v2 in n:
-                for v3 in n:
-                    if graph.has_edge(v2, v3):
-                        results.add(frozenset((v1, v2, v3)))
+        results = []
+        for v1 in vertices:
+            n = list(graph.neighbors(v1))
+            for v2 in range(0, len(n) - 1):
+                for v3 in range(v2 + 1, len(n)):
+                    # avg O(1) worst O(n)
+                    if graph.has_edge(n[v2], n[v3]):
+                        results.append((v1, n[v2], n[v3]))
+            graph.remove_vertex(v1)
         return results
 
     g1 = graph.AdjacencyList(vertices, edges)
@@ -60,11 +66,13 @@ def adj_list(vertices, edges, only_count=False):
     if only_count:
         return len(s1) + len(s2)
     else:
-        return s1 | s2
+        return s1 + s2
 
 
+# avg O(n^3), worst O(n^4)
 def degree(vertices, edges, only_count=False):
     def sub_solve(graph):
+        # O(1)
         def update_neighbor(v):
             v[0][1] -= 1
             index = v[1]
@@ -72,17 +80,24 @@ def degree(vertices, edges, only_count=False):
                 vd_list[index], vd_list[index - 1] = vd_list[index - 1], vd_list[index]
 
         results = set()
+        # O(n)
         vd_list = [[v, graph.degree(v)] for v in graph.vertices()]
+        # O(nlgn)
         vd_list.sort(key=lambda x: x[1])
         vd_count = len(vd_list)
+        # avg O(n^3), worst O(n^4)
         for i in range(vd_count):
             vd = vd_list.pop(0)
+            # O(n)
             neighbors = [(vd_list[i], i) for i in range(0, len(vd_list)) if graph.has_edge(vd[0], vd_list[i][0])]
             if vd[1] >= 2:
+                # avg O(n^2), worst O(n^3)
                 for v2 in neighbors:
                     if v2[0][1] == 1:
                         continue
+                    # avg O(min(deg v1, deg v2)) ~= O(n), worst O(deg v1 * deg v2) ~= O(n^2)
                     common_neighbors = graph.neighbors(vd[0]) & graph.neighbors(v2[0][0])
+                    # avg O(n), worst O(n^2)
                     for v3 in common_neighbors:
                         results.add(frozenset((vd[0], v2[0][0], v3)))
                     update_neighbor(v2)
