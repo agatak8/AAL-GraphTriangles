@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 # this library allows converting graphs and triangles to/from their string formats
 #
 # graph - is a list/tuple with 3 items:

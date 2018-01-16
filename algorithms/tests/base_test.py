@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 from helpers import generator
 from algorithms import solvers
 

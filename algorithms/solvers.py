@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 import algorithms.graph as graph
 import numpy as np
 

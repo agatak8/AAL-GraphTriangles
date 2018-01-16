@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 from algorithms.solvers import solve
 from time import process_time as timer
 

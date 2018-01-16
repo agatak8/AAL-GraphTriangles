@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 import argparse
 import sys
 import algorithms.solvers as solvers

@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 from random import randint
 from math import log2
 from math import cos, sin, pi

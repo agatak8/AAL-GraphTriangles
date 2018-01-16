@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 import unittest
 from algorithms.solvers import *
 from algorithms.tests import base_test

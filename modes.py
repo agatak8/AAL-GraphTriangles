@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 import helpers.io as io
 import helpers.generator as generator
 from helpers.measure import measure

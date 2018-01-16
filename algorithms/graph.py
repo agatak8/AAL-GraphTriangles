@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 class AdjacencyList(object):
     def __init__(self, vertices=set(), edges=set()):
         self.data = dict()

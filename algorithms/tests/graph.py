@@ -1,3 +1,6 @@
+# Agata Kłoss
+# znalezienie liczby trójkątów w grafie
+
 import unittest
 from algorithms.graph import AdjacencyList
 
