@@ -9,10 +9,10 @@ class TestNaiveMethod(unittest.TestCase, base_test.SolverTest):
         base_test.SolverTest.__init__(self, naive)
 
 
-class TestMatrixMethod(unittest.TestCase, base_test.SolverTest):
-    def __init__(self, *args, **kwargs):
-        unittest.TestCase.__init__(self, *args, **kwargs)
-        base_test.SolverTest.__init__(self, matrix, True)
+# class TestMatrixMethod(unittest.TestCase, base_test.SolverTest):
+#     def __init__(self, *args, **kwargs):
+#         unittest.TestCase.__init__(self, *args, **kwargs)
+#         base_test.SolverTest.__init__(self, matrix, True)
 
 
 class TestListMethod(unittest.TestCase, base_test.SolverTest):

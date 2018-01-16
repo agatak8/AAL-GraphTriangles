@@ -42,7 +42,7 @@ def matrix(vertices, edges, dummy_arg=None):
     m2 = m1 ^ 1
     for i in range(len(vertices)):
         m2[i, i] = 0
-    return ((m1 ** 3).trace() / 6 + (m2 ** 3).trace() / 6)[0, 0]
+    return int(((m1 ** 3).trace() / 6 + (m2 ** 3).trace() / 6)[0, 0])
 
 
 # avg O(n^3), worst O(n^4)

@@ -1,3 +1,6 @@
+from helpers import generator
+from algorithms import solvers
+
 def n_choose_3(n):
     return n * (n - 1) * (n - 2) / 6
 
@@ -34,3 +37,33 @@ class SolverTest(object):
         vertices = (1, 2, 3, 4, 5)
         edges = ((1, 2), (2, 3), (3, 4), (4, 5), (5, 1))
         self.count_assert(vertices, edges, 0)
+
+    def test_random_small(self):
+        vertices, edges = generator.random_graph(8,16)
+        count = solvers.matrix(vertices, edges)
+        self.count_assert(vertices, edges, count)
+
+    def test_random_big(self):
+        vertices, edges = generator.random_graph(64, 512)
+        count = solvers.matrix(vertices, edges)
+        self.count_assert(vertices, edges, count)
+
+    def test_2_regular(self):
+        vertices, edges = generator.k_regular(15, 2)
+        count = solvers.matrix(vertices, edges)
+        self.count_assert(vertices, edges, count)
+
+    def test_55_regular(self):
+        vertices, edges = generator.k_regular(64, 55)
+        count = solvers.matrix(vertices, edges)
+        self.count_assert(vertices, edges, count)
+
+    def test_bipartite(self):
+        vertices, edges = generator.bipartite_graph(16,32)
+        count = solvers.matrix(vertices, edges)
+        self.count_assert(vertices, edges, count)
+
+    def test_binary_tree(self):
+        vertices, edges = generator.binary_tree(64)
+        count = solvers.matrix(vertices, edges)
+        self.count_assert(vertices, edges, count)
