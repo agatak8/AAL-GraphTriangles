@@ -51,6 +51,12 @@ Porównywane są 4 algorytmy znajdowania trójkątów w grafie:
 - listowy - tworzy listę sąsiadów dla każdego wierzchołka, sprawdza pary punktów w listach
 - wierzchołkowy - modyfikacja listowego - sortuje wierzchołki wg malejących stopni, usuwa wierzchołek po sprawdzeniu jego listy
 
+Wykorzystane struktury danych:
+naiwny - lista
+macierzowy - macierz
+listowy - zbiór (pozwala na szybsze sprawdzenie istnienia wierzchołka na liście incydencji)
+wierzchołkowy - zbiór
+
 
  =====================================================================
  Pliki źródłowe
