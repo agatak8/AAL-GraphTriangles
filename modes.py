@@ -38,7 +38,10 @@ def stdio(algorithm):
         print(e.args)
         return
     triangles = solvers.solve(vertices, edges, algorithm)
-    result = io.triangles_to_output(triangles)
+    if(algorithm == "matrix"):
+        result = str(triangles)
+    else:
+        result = io.triangles_to_output(triangles)
     return result
 
 

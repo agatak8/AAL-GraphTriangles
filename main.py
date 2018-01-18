@@ -10,8 +10,8 @@ import modes
 
 
 def stdio(args):
-    sys.stdout.write("Algorithm: %s\n" % args.a)
     sys.stdout.write(modes.stdio(args.a))
+    sys.stdout.write("\n")
 
 
 def gen(args):
@@ -38,7 +38,13 @@ def test(args):
     for it in result:
         sys.stdout.write("%d\t%.4f\t%.2f\n"
                          % (it[0], it[1], it[2]))
-    pass
+
+    if args.f:
+        with open(args.f, "w") as file:
+            file.write("n\tt(n)\tq(n)\n")
+            for it in result:
+                file.write("%d\t%.4f\t%.2f\n"
+                                 % (it[0], it[1], it[2]))
 
 
 # must subclass ArgumentParser to make it print help on error
@@ -95,6 +101,7 @@ def main():
     m3_parser.add_argument("-step", type=int, required=True, help="amount to increment size each step",)
     m3_parser.add_argument("-r", type=int, required=True, help="how many repetitions per size",
                            metavar="repetitions")
+    m3_parser.add_argument("-f", type=str, required=False, help="output file")
     m3_parser.set_defaults(func=test)
 
     args = main_parser.parse_args()

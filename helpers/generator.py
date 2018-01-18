@@ -52,21 +52,21 @@ def full_graph(n_vertices, n_edges=None):
 
 def k_regular(n_vertices, k):
     vertices = range(n_vertices)
+    edges = set()
+
+    if k % 2 == 1:
+        if n_vertices % 2 != 0:
+            k -= 1
+        else:
+            for i in range(0, n_vertices - 1):
+                edges.add(frozenset((i, (i + n_vertices // 2) % n_vertices)))
     if k > n_vertices:
         return None, None
     m = k // 2
-    edges = set()
     for i in range(0, n_vertices - 1):
         for j in range(1, m + 1):
             edges.add(frozenset({i, (i + j) % n_vertices}))
             edges.add(frozenset({i, (i - j) % n_vertices}))
-    if k % 2 == 1:
-        if n_vertices % 2 != 0:
-            print("If n_vertices is odd, k must be even!")
-            return
-        else:
-            for i in range(0, n_vertices - 1):
-                edges.add(frozenset((i, (i + n_vertices // 2) % n_vertices)))
     edges2 = [list(edge) for edge in edges]
     return vertices, edges2
 

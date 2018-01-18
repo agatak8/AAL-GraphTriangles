@@ -95,6 +95,8 @@ def adj_list(vertices, edges, only_count=False):
 def degree(vertices, edges, only_count=False):
     def sub_solve(graph):
         # O(1)
+        # update degrees in list and make sure the list is sorted
+        # rather than sort the whole list again, you can just swap at most once if needed
         def update_neighbor(v):
             v[0][1] -= 1
             index = v[1]
@@ -103,6 +105,7 @@ def degree(vertices, edges, only_count=False):
 
         results = set()
         # O(n)
+        # list of pairs vertex,degree(vertex)
         vd_list = [[v, graph.degree(v)] for v in graph.vertices()]
         # O(nlgn)
         vd_list.sort(key=lambda x: x[1])
@@ -111,6 +114,7 @@ def degree(vertices, edges, only_count=False):
         for i in range(vd_count):
             vd = vd_list.pop(0)
             # O(n)
+            # keep the vertex's index in the list for faster access
             neighbors = [(vd_list[i], i) for i in range(0, len(vd_list)) if graph.has_edge(vd[0], vd_list[i][0])]
             if vd[1] >= 2:
                 # avg O(n^2), worst O(n^3)
@@ -142,8 +146,7 @@ def degree(vertices, edges, only_count=False):
 # available algorithms
 algs = {"naive": naive, "matrix": matrix, "list": adj_list, "degree": degree}
 
-# their theoretical big O complexities - all assume average case O(n),
-# currently all are O(n^3), but are listed separately just in case of future changes
+# their theoretical complexities - all assume average case
 complexities = {"naive": lambda n: n ** 5, "matrix": lambda n: n ** 3,
                 "list": lambda n: n ** 3, "degree": lambda n: n ** 3}
 
