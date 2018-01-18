@@ -2,6 +2,7 @@
 # znalezienie liczby trójkątów w grafie
 
 class AdjacencyList(object):
+    # O(n) n = len(vertices)
     def __init__(self, vertices=set(), edges=set()):
         self.data = dict()
         for v in vertices:
@@ -37,10 +38,13 @@ class AdjacencyList(object):
 
     def remove_vertex(self, v1):
         del self.data[v1]
+        # average O(n), worst O(n^2)
         for v in self.data:
+            # average O(1), worst O(n)
             self.data[v].discard(v1)
 
     def remove_edge(self, v1, v2):
+        # average O(1), worst O(n)
         self.data[v1].remove(v2)
         self.data[v2].remove(v1)
 
@@ -53,7 +57,7 @@ class AdjacencyList(object):
     def degree(self, v1):
         return len(self.data[v1])
 
-    # ~O(n)
+    # O(n^2)
     def get_complement(self):
         vertices = set(self.data.keys())
         new_graph = AdjacencyList(vertices)

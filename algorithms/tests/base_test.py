@@ -4,6 +4,7 @@
 from helpers import generator
 from algorithms import solvers
 
+
 def n_choose_3(n):
     return n * (n - 1) * (n - 2) / 6
 
@@ -31,10 +32,9 @@ class SolverTest(object):
         edges = ((1, 2), (1, 3), (2, 3))
         self.count_assert(vertices, edges, 1)
 
-    def test_full_50(self):
-        vertices = range(50)
-        edges = ((i, j) for i in vertices for j in range(i + 1, len(vertices)))
-        self.count_assert(vertices, edges, n_choose_3(50))
+    def test_full_10(self):
+        vertices, edges = generator.full_graph(10)
+        self.count_assert(vertices, edges, n_choose_3(10))
 
     def test_1_regular(self):
         vertices = (1, 2, 3, 4, 5)
@@ -42,12 +42,12 @@ class SolverTest(object):
         self.count_assert(vertices, edges, 0)
 
     def test_random_small(self):
-        vertices, edges = generator.random_graph(8,16)
+        vertices, edges = generator.random_graph(8, 16)
         count = solvers.matrix(vertices, edges)
         self.count_assert(vertices, edges, count)
 
     def test_random_big(self):
-        vertices, edges = generator.random_graph(64, 512)
+        vertices, edges = generator.random_graph(8, 16)
         count = solvers.matrix(vertices, edges)
         self.count_assert(vertices, edges, count)
 
@@ -56,17 +56,17 @@ class SolverTest(object):
         count = solvers.matrix(vertices, edges)
         self.count_assert(vertices, edges, count)
 
-    def test_55_regular(self):
-        vertices, edges = generator.k_regular(64, 55)
+    def test_10_regular(self):
+        vertices, edges = generator.k_regular(20, 10)
         count = solvers.matrix(vertices, edges)
         self.count_assert(vertices, edges, count)
 
     def test_bipartite(self):
-        vertices, edges = generator.bipartite_graph(16,32)
+        vertices, edges = generator.bipartite_graph(8, 16)
         count = solvers.matrix(vertices, edges)
         self.count_assert(vertices, edges, count)
 
     def test_binary_tree(self):
-        vertices, edges = generator.binary_tree(64)
+        vertices, edges = generator.binary_tree(32)
         count = solvers.matrix(vertices, edges)
         self.count_assert(vertices, edges, count)

@@ -5,17 +5,26 @@ import algorithms.graph as graph
 import numpy as np
 
 
-# avg O(n^3), worst O(n^4)
+# O(n^5)
 def naive(vertices, edges, only_count=False):
-    def sub_solve(graph):
+    def has_edge(i, j, edges):
+        for edge in edges:
+            if (edge[0] == i and edge[1] == j) or (edge[0] == j and edge[1] == i):
+                return True
+        return False
+
+    # O(n^5)
+    def sub_solve(vertices, edges):
         v = list(vertices)  # O(N)
         results = []
         count = 0
+
+        # this for loop format guarantees no duplicate triangles
         for i in range(0, len(v)):
             for j in range(i + 1, len(v)):
                 for k in range(j + 1, len(v)):
-                    # avg O(1), worst case O(n)
-                    if graph.has_edge(v[i], v[j]) and graph.has_edge(v[i], v[k]) and graph.has_edge(v[j], v[k]):
+                    # has_edge is O(len(edges)), up to O(n^2)
+                    if has_edge(v[i], v[j], edges) and has_edge(v[i], v[k], edges) and has_edge(v[j], v[k], edges):
                         if only_count:
                             count += 1
                         else:
@@ -25,12 +34,16 @@ def naive(vertices, edges, only_count=False):
         else:
             return results
 
-    g1 = graph.AdjacencyList(vertices, edges)
-    g2 = g1.get_complement()
-    return sub_solve(g1) + sub_solve(g2)
+    complement_edges = []
+    # O(n^4)
+    for i in range(len(vertices) - 1):
+        for j in range(i + 1, len(vertices)):
+            if not has_edge(i, j, edges):
+                complement_edges.append((i, j))
+    return sub_solve(vertices, edges) + sub_solve(vertices, complement_edges)
 
 
-# best O(n^2.3727), worst O(n^3)
+# O(n^3) because numpy's matrix multiplication, but it is heavily optimized for modern processors
 def matrix(vertices, edges, dummy_arg=None):
     vertex_dict = {}
     i = 0
@@ -51,25 +64,31 @@ def matrix(vertices, edges, dummy_arg=None):
 # avg O(n^3), worst O(n^4)
 def adj_list(vertices, edges, only_count=False):
     def sub_solve(graph):
+        count = 0
         results = []
         for v1 in vertices:
             n = list(graph.neighbors(v1))
+            # check for each unique neighbor pair if it has an edge
             for v2 in range(0, len(n) - 1):
                 for v3 in range(v2 + 1, len(n)):
                     # avg O(1) worst O(n)
                     if graph.has_edge(n[v2], n[v3]):
-                        results.append((v1, n[v2], n[v3]))
+                        if only_count:
+                            count += 1
+                        else:
+                            results.append((v1, n[v2], n[v3]))
+            # remove checked vertex from other vertices's lists
             graph.remove_vertex(v1)
-        return results
+        if only_count:
+            return count
+        else:
+            return results
 
     g1 = graph.AdjacencyList(vertices, edges)
     g2 = g1.get_complement()
     s1 = sub_solve(g1)
     s2 = sub_solve(g2)
-    if only_count:
-        return len(s1) + len(s2)
-    else:
-        return s1 + s2
+    return s1 + s2
 
 
 # avg O(n^3), worst O(n^4)
@@ -120,7 +139,13 @@ def degree(vertices, edges, only_count=False):
         return s1 | s2
 
 
+# available algorithms
 algs = {"naive": naive, "matrix": matrix, "list": adj_list, "degree": degree}
+
+# their theoretical big O complexities - all assume average case O(n),
+# currently all are O(n^3), but are listed separately just in case of future changes
+complexities = {"naive": lambda n: n ** 5, "matrix": lambda n: n ** 3,
+                "list": lambda n: n ** 3, "degree": lambda n: n ** 3}
 
 
 def solve(vertices, edges, alg_choice, only_count=False):

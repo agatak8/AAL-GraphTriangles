@@ -27,51 +27,74 @@ def gen(args):
 
 
 def test(args):
-    # def test(algorithm, initial_size, density, step, count, type):
-    result = modes.test(args.a, args.n, args.d, args.step, args.k, args.t)
-    sys.stdout.write("Algorithm: %s\nGraph type: %s\nDensity: %f\n" % (args.a, args.t, args.d))
+    sys.stdout.write("Algorithm: %s\nGraph type: %s\nDensity: %f\n"
+                     % (args.a, args.t, args.d))
+    sys.stdout.write("Initial size: %d\nIterations: %d\nRepetitions: %d\nStep: %d\n"
+                     % (args.n, args.k, args.r, args.step))
+    sys.stdout.write("=======================\n")
+    result = modes.test(args.a, args.n, args.d, args.step, args.k, args.t, args.r)
     sys.stdout.write("n\tt(n)\tq(n)\n")
+
     for it in result:
-        sys.stdout.write("%d\t%.2f\t%.2f\n" % (it[0], it[1], it[2]))
+        sys.stdout.write("%d\t%.4f\t%.2f\n"
+                         % (it[0], it[1], it[2]))
     pass
 
 
+# must subclass ArgumentParser to make it print help on error
+class DefaultHelpParser(argparse.ArgumentParser):
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help()
+        sys.exit(2)
+
+
 def main():
-    main_parser = argparse.ArgumentParser(description="Graph triangle finder")
+    main_parser = DefaultHelpParser(description="Graph triangle finder")
     subparsers = main_parser.add_subparsers(dest="mode", help="program mode")
     subparsers.required = True
 
-    # mode 1
+    # mode 1 - standard input/output
     m1_parser = subparsers.add_parser("stdio", help="take graph data from stdin and put solution in stdout")
     m1_parser.add_argument("-a", type=str, choices=solvers.algs.keys(),
                            required=True, help="solving algorithm")
     m1_parser.set_defaults(func=stdio)
 
-    # mode 2
+    # mode 2 - generate and output graph and result to two files
     m2_parser = subparsers.add_parser("gen",
                                       help="generate graph data and write graph and solution to file1 and file 2 respectively")
     m2_parser.add_argument("-a", type=str, choices=solvers.algs.keys(),
                            required=True, help="solving algorithm")
     m2_parser.add_argument("-t", type=str, choices=modes.generate_types.keys(), required=True,
-                           help="type of graphs to generate")
-    m2_parser.add_argument("-V", type=int, required=True, help="vertex count")
-    m2_parser.add_argument("-E", type=int, required=False, help="edge count/regularity")
-    m2_parser.add_argument("-f1", type=str, required=True, help="output file for graph")
-    m2_parser.add_argument("-f2", type=str, required=True, help="output file for solution")
+                           help="type of graphs to generate",
+                           metavar="type")
+    m2_parser.add_argument("-V", type=int, required=True, help="vertex count",
+                           metavar="vertices")
+    m2_parser.add_argument("-E", type=int, required=False, help="edge count/regularity",
+                           metavar="edges")
+    m2_parser.add_argument("-f1", type=str, required=True, help="output file for graph",
+                           metavar="output_graph_file")
+    m2_parser.add_argument("-f2", type=str, required=True, help="output file for solution",
+                           metavar="output_solution_file")
     m2_parser.set_defaults(func=gen)
 
-    # mode 3
-    m3_parser = subparsers.add_parser("test", help="perform testing process for all methods",
+    # mode 3 - time measurement testing process
+    m3_parser = subparsers.add_parser("test", help="perform testing process for chosen algorithm",
                                       description="measure time for increasing n\n"
                                                   "and compare with the theoretical complexity")
     m3_parser.add_argument("-a", type=str, choices=solvers.algs.keys(),
                            required=True, help="solving algorithm")
-    m3_parser.add_argument("-t", type=str, choices=modes.generate_types.keys(), required=True,
+    m3_parser.add_argument("-t", type=str, choices=modes.test_types.keys(), required=True,
                            help="type of graphs to generate")
-    m3_parser.add_argument("-k", type=int, required=True, help="how many graphs to test against")
-    m3_parser.add_argument("-n", type=int, required=True, help="initial graph size (vertex count)")
-    m3_parser.add_argument("-d", type=float, required=True, help="graph density [0-1]")
-    m3_parser.add_argument("-step", type=int, required=True, help="amount to increment size each step")
+    m3_parser.add_argument("-k", type=int, required=True, help="how many graphs to test against",
+                           metavar="iterations")
+    m3_parser.add_argument("-n", type=int, required=True, help="initial graph size (vertex count)",
+                           metavar="size")
+    m3_parser.add_argument("-d", type=float, required=True, help="graph density [0-1]",
+                           metavar="density")
+    m3_parser.add_argument("-step", type=int, required=True, help="amount to increment size each step",)
+    m3_parser.add_argument("-r", type=int, required=True, help="how many repetitions per size",
+                           metavar="repetitions")
     m3_parser.set_defaults(func=test)
 
     args = main_parser.parse_args()

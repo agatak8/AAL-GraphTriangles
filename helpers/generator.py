@@ -6,6 +6,8 @@ from math import log2
 from math import cos, sin, pi
 
 
+# 2D coordinate generators for vertices:
+
 def random_points(vertices, width):
     point_dict = {}
     for v in vertices:
@@ -39,6 +41,8 @@ def tree_points(vertices, width, height):
         point_dict[i] = (-width // 2 + dx * offset, -height // 2 + dy * level)
     return point_dict
 
+
+# graph generators:
 
 def full_graph(n_vertices, n_edges=None):
     vertices = list(range(n_vertices))

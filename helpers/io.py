@@ -1,29 +1,8 @@
 # Agata Kłoss
 # znalezienie liczby trójkątów w grafie
 
-# this library allows converting graphs and triangles to/from their string formats
-#
-# graph - is a list/tuple with 3 items:
-# item 1 - a list/tuple of vertices
-# item 2 - a dict that maps vertices to points
-# item 3 - a list/tuple of edges
-#
-# vertex is an int
-# point is a tuple of two floats
-# edge is a list/tuple of two vertices
-#
-# triangles - is a list/tuple of triangles where
-# a single triangle is a list/tuple of 3 vertices
-#
-# graph string format:
-# n_vertices            (1)
-# vertex_nr;x;y         (n_vertices)
-# vertex_nr1;vertex_nr2   (0..*)
-#
-# triangles string format:
-# vertex_n1r;vertex_nr2;vertex_nr3 (0..*)
-#
-# " " is the default separator but any other character/string can be used as well
+# field separator in files
+# the C++ program QtGraphs uses space as a separator
 io_separator = " "
 
 
