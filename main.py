@@ -72,8 +72,7 @@ def main():
     m2_parser.add_argument("-a", type=str, choices=solvers.algs.keys(),
                            required=True, help="solving algorithm")
     m2_parser.add_argument("-t", type=str, choices=modes.generate_types.keys(), required=True,
-                           help="type of graphs to generate",
-                           metavar="type")
+                           help="type of graphs to generate")
     m2_parser.add_argument("-V", type=int, required=True, help="vertex count",
                            metavar="vertices")
     m2_parser.add_argument("-E", type=int, required=False, help="edge count/regularity",
